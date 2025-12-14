@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Cheatsheet</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Funnel+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['"Sora"', 'sans-serif'],
+                        sans: ['"Funnel Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-bg': '#f0f4f8',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .card-header {
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper {
+            transition: all 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Checkmark transition */
+        .check-icon {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: scale(0.5) rotate(-45deg);
+        }
+
+        .check-icon.visible {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .ph {
+            transition: color 0.3s ease;
+        }
+
+        /* Override Tailwind's blue-600 to use brand color #007aff */
+        :root {
+            --brand-blue-600: #007aff;
+        }
+
+        .text-blue-600 {
+            color: var(--brand-blue-600) !important;
+        }
+
+        .bg-blue-600 {
+            background-color: var(--brand-blue-600) !important;
+        }
+
+        .border-blue-600 {
+            border-color: var(--brand-blue-600) !important;
+        }
+
+        .caret-blue-600 {
+            caret-color: var(--brand-blue-600) !important;
+        }
+
+        /* Tailwind uses class names with colons for states, escape them here */
+        .focus\:border-blue-600:focus {
+            border-color: var(--brand-blue-600) !important;
+        }
+
+        /* Modal Animation - Slide Up & Fade In */
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content {
+            animation: modalAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Increase question body text on desktop for better readability */
+        @media (min-width: 1024px) {
+            .card-content textarea {
+                font-size: 1.25rem;
+                /* Tailwind text-xl */
+                line-height: 1.6;
+            }
+        }
+    </style>
+</head>
+
+<body class="px-2 sm:px-6 bg-brand-bg">
+
+    <div
+        class="mx-auto w-full max-w-3xl bg-transparent sm:bg-white min-h-screen shadow-none sm:shadow-sm border-none sm:border-x border-blue-100 py-12 sm:py-24">
+
+        <div class="pb-8 px-4 sm:px-12">
+            <h1
+                class="text-5xl sm:text-6xl font-extrabold text-blue-600 tracking-tighter mb-4 font-heading leading-[0.9] text-center">
+                Brand Cheatsheet
+            </h1>
+
+            <p
+                class="text-2xl text-gray-500 max-w-lg mx-auto text-center min-[794px]:text-left leading-snug subtext mb-4 font-heading font-normal text-balance">
+                This is our roadmap. Get your thoughts down. You don't need full sentences—just notes, lists, however it
+                comes to mind.
+            </p>
+        </div>
+
+        <div class="px-2 sm:px-12 pb-12">
+
+            <div class="mb-10 px-2 mt-8 sm:mt-12">
+                <div class="flex flex-col gap-10 min-[794px]:flex-row min-[794px]:items-start min-[794px]:gap-8">
+
+                    <div class="flex-1">
+                        <label for="clientName"
+                            class="block text-blue-400 font-sans font-bold text-base sm:text-sm uppercase tracking-wider mb-2 ml-1">
+                            First things first, what's your name?
+                        </label>
+                        <input type="text" id="clientName" data-field="clientName" placeholder="Justin Case"
+                            class="w-full py-3 bg-transparent border-b-2 border-blue-100 focus:border-blue-600 focus:outline-none transition-colors duration-300 font-heading font-bold text-4xl text-blue-900 placeholder-blue-200">
+                    </div>
+
+                    <div
+                        class="flex-shrink-0 flex flex-col items-start min-[794px]:items-end min-[794px]:ml-8 min-[794px]:text-right">
+                        <div id="your-cheat-sheet-id-box" class="inline-flex items-center space-x-2 mb-2">
+                            <span
+                                class="uppercase tracking-wider text-blue-400 text-base sm:text-sm font-bold font-sans">ID:</span>
+                            <span id="cheat-sheet-id-display"
+                                class="uppercase tracking-wide text-blue-400 text-base sm:text-sm font-semibold font-sans">Cooking...</span>
+                        </div>
+
+                        <a href="#load-session-area"
+                            class="text-base sm:text-sm lg:text-base text-blue-600 font-normal underline transition-colors hover:text-blue-800 font-sans">
+                            Looking for a saved session?
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="strategy-sections" class="space-y-4">
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="0">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-flag text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Start here
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="purpose"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Let's start with the big picture. Why are you really doing this? What's the one thing you want to accomplish?"
+                                data-field="purpose"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="1">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-rocket-launch text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                What you do
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="mission"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Okay, so what do you do? If you had to explain your business to a tiny child, what would you say?"
+                                data-field="mission"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="2">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-binoculars text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                The long game
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon" data-check-for="vision"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Let's talk about the future. Besides the burrito in the freezer, what are your plans? Two burritos?"
+                                data-field="vision"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="3">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-users-three text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Your people
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="audience1"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Who are you building this for? Try to picture just one person. What are they listening to? What books have they read?"
+                                data-field="audience1"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="4">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-tent text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Your tent
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="audience2"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="There's only so much space under your content tent. What do you need to share with your people? Photos? Videos? Events?"
+                                data-field="audience2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="5">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-compass text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Discovery channels
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="buyerJourney"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Think about the discovery process for your brand. Where do people usually find you? What makes them reach out?"
+                                data-field="buyerJourney"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="6">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-target text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Your niche, capisce?
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="competitorAnalysis"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Who else is doing something similar? What are they doing well? What would you do differently?"
+                                data-field="competitorAnalysis"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="7">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-crown text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                The big one
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="brandValues"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="If your website could have just one button, what would it say? Book a session? Subscribe? Learn more?"
+                                data-field="brandValues"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="8">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-traffic-cone text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Traffic jams
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="problemsSolutions"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Assuming your people have already clicked the big button, why should they come back?"
+                                data-field="problemsSolutions"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="9">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-traffic-signal text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Red light, green light
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="brandVoice"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="Imagine your finished website. What feedback would you love to hear? What would be disappointing?"
+                                data-field="brandVoice"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="accordion-item border border-blue-100 sm:border-gray-200 rounded-xl bg-white overflow-hidden transition-all shadow-sm sm:shadow-none">
+                    <div class="card-header group p-5 flex justify-between items-center cursor-pointer bg-white hover:bg-blue-50"
+                        tabindex="0" data-index="10">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="icon-wrapper w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105">
+                                <i class="ph ph-brain text-2xl text-blue-600"></i>
+                            </div>
+                            <span
+                                class="accordion-title font-heading font-bold text-blue-600 text-2xl tracking-tight leading-none transition-colors">
+                                Brain dump
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="ph ph-check-circle text-2xl text-blue-600 check-icon"
+                                data-check-for="yourThoughts"></i>
+                            <i class="ph ph-caret-down text-xl text-gray-400 transition-transform duration-300"></i>
+                        </div>
+                    </div>
+                    <div
+                        class="card-content border-t border-transparent max-h-0 opacity-0 overflow-hidden transition-all duration-700 ease-in-out">
+                        <div class="p-5">
+                            <textarea
+                                class="w-full p-4 text-gray-700 bg-gray-50 focus:bg-white rounded-lg border-none focus:ring-0 focus:outline-none caret-blue-600 transition-colors duration-200 text-lg leading-relaxed font-sans resize-none"
+                                rows="6"
+                                placeholder="This is a safe space. If there's anything you'd like to ask or mention, now's your chance."
+                                data-field="yourThoughts"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-12 flex flex-col items-center space-y-6">
+                <button id="sendBtn"
+                    class="w-full sm:w-auto px-8 p-5 sm:py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 hover:shadow-blue-500/50 transform hover:-translate-y-0.5 transition-all duration-200 font-heading text-2xl sm:text-xl tracking-wide disabled:opacity-50 disabled:cursor-not-allowed">
+                    Submit Cheatsheet
+                </button>
+
+                <button id="resetBtn"
+                    class="text-base sm:text-sm lg:text-base text-blue-600 font-normal underline hover:text-blue-800 transition-colors font-sans py-2">
+                    Clear & start over
+                </button>
+            </div>
+
+            <hr class="border-t border-blue-200/50 mt-12 mb-12 w-full" />
+
+            <div id="load-session-area" class="pt-4 sm:pt-0 border-none">
+                <div
+                    class="bg-transparent sm:bg-gray-50 rounded-none sm:rounded-xl p-0 sm:p-8 border-none sm:border sm:border-gray-200 text-center w-full sm:max-w-lg mx-auto">
+                    <h3 class="text-2xl font-heading font-bold text-blue-600 mb-2 leading-none tracking-tight">
+                        View an existing Cheatsheet
+                    </h3>
+
+                    <p
+                        class="text-base sm:text-sm lg:text-base text-gray-500 mb-6 font-sans max-w-lg mx-auto text-center text-balance">
+                        Enter your ID below to reload your previous work.</p>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" id="joinWorkbookIDInput" placeholder="Enter Cheatsheet ID"
+                            class="flex-1 bg-white border border-gray-200 text-gray-700 text-base rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 caret-blue-600 block w-full p-5 sm:p-3.5 font-sans leading-relaxed">
+
+                        <button id="joinBtn"
+                            class="w-full sm:w-auto px-8 p-5 sm:py-3 bg-white text-blue-600 border-2 border-blue-600 font-bold rounded-xl shadow-sm hover:bg-blue-50 transform hover:-translate-y-0.5 transition-all duration-200 font-heading text-2xl sm:text-xl tracking-wide">
+                            Load
+                        </button>
+                    </div>
+                    <div id="joinStatusMessage" class="status-message mt-2 text-red-500 font-sans"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="save-indicator"
+            class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 bg-white border border-blue-100 shadow-lg rounded-full px-5 py-2.5 flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-500 ease-out z-50 pointer-events-none">
+            <i id="save-spinner" class="ph ph-spinner-gap animate-spin text-lg text-blue-600 hidden"></i>
+            <i id="save-check" class="ph ph-check text-lg text-blue-600 hidden"></i>
+            <span id="save-text" class="text-sm font-sans font-semibold text-blue-600">Saved</span>
+        </div>
+
+        <div id="yourCheatSheetIDModal"
+            class="modal-overlay fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 hidden"
+            style="z-index: 9999;">
+            <div
+                class="modal-content bg-white p-10 rounded-3xl shadow-2xl max-w-sm w-full relative mx-4 text-center border-t-8 border-blue-100">
+
+                <button id="modalCloseBtn"
+                    class="absolute top-2 right-2 w-12 h-12 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none z-50"
+                    aria-label="Close">
+                    <span class="text-3xl font-light leading-none">&times;</span>
+                </button>
+
+                <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="ph-fill ph-paper-plane-tilt text-4xl text-blue-600"></i>
+                </div>
+
+                <h3 class="text-4xl font-black mb-2 tracking-tight leading-none text-gray-900 font-heading">
+                    Got it!
+                </h3>
+
+                <p class="mb-6 text-gray-500 font-sans leading-relaxed text-balance mx-auto">
+                    Nice work. Get yourself a little treat while I have a look at these in the lab. 🔬
+                </p>
+
+                <div class="text-xs text-gray-400 font-sans border-t border-gray-100 pt-6 mt-6">
+                    <p class="mb-1 uppercase tracking-wider font-semibold text-gray-300 text-base sm:text-sm">Reference
+                        ID</p>
+                    <div class="flex items-center justify-center gap-2 cursor-pointer hover:text-gray-600 transition-colors"
+                        id="modalCopyTextTrigger">
+                        <span id="modalCheatSheetID"
+                            class="font-mono bg-gray-50 text-gray-500 px-3 py-1 rounded text-base sm:text-sm">...</span>
+                        <i class="ph ph-copy"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = "https://dgogikyaktqttdgdmsvf.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." +
+            "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnb" +
+            "2dpa3lha3RxdHRkZ2Rtc3ZmIiwicm9sZSI6Im" +
+            "Fub24iLCJpYXQiOjE3NTcxMjQ4MTMsImV4cCI" +
+            "6MjA3MjcwMDgxM30.46tmjwIyiB-B1wJtjum5" +
+            "-D3AqcWhGvbhpBYtbsJ2MMg";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* IMPORTANT: REPLACE WITH YOUR MAKE.COM WEBHOOK URL */
+        const WEBHOOK_URL = "https://hook.us2.make.com/f9wb1y39s3vjdbwsfol3l7wttxkg1ld6";
+
+        const ADJECTIVES = ["bold", "bright", "cozy", "crisp", "elegant", "fresh", "gentle", "happy", "lively", "radiant", "smooth", "vibrant", "calm", "vivid", "sunny", "frosty"];
+        const COLORS = ["red", "blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown", "gray", "silver", "teal", "cyan", "lime", "indigo"];
+        const ANIMALS = ["otter", "koala", "badger", "chipmunk", "sloth", "flamingo", "meerkat", "penguin", "toucan", "cheetah", "gecko", "ferret", "puma", "panda"];
+        const ACTIONS = ["floating", "dreaming", "singing", "relaxing", "gliding", "sparkling", "soaring", "whispering", "shining", "dancing", "drifting", "exploring", "creating", "vibing", "meditating", "cackling"];
+
+        let strategySections, cheatSheetIdDisplay, yourCheatSheetIdBox, joinWorkbookIDInput, joinBtn, sendBtn, resetBtn, modalOverlay, modalCloseBtn, modalCheatSheetID, modalCopyBtn, clientNameInput;
+        let sheetId, isViewingExisting = false;
+
+        const ACTIVE_CLASSES = ['bg-blue-50'];
+        const INACTIVE_CLASSES = ['bg-white'];
+
+        const ACTIVE_TEXT = ['text-blue-900'];
+        const INACTIVE_TEXT = ['text-blue-600'];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const storedJoinedId = localStorage.getItem('joinedSheetId');
+            const storedOwnId = localStorage.getItem('cheatSheetId');
+
+            if (storedJoinedId) {
+                isViewingExisting = true;
+                sheetId = storedJoinedId;
+            } else {
+                sheetId = storedOwnId || generateUniqueId();
+                if (!storedOwnId) localStorage.setItem('cheatSheetId', sheetId);
+            }
+
+            initDOM();
+
+            if (cheatSheetIdDisplay) cheatSheetIdDisplay.textContent = sheetId;
+            if (modalCheatSheetID) modalCheatSheetID.textContent = sheetId;
+            if (sendBtn) sendBtn.disabled = false;
+
+            loadDataFromSupabase(sheetId);
+            setupToggleBehavior();
+            setupTabNavigation();
+            setupAutosaveWithFeedback();
+            setupJoinButton();
+            // Checkmarks are now handled inside toggle behavior + data load
+
+            if (resetBtn) resetBtn.addEventListener('click', resetSession);
+
+            if (sendBtn && modalOverlay) {
+                sendBtn.addEventListener('click', async () => {
+                    // Change button state
+                    const originalText = sendBtn.textContent;
+                    sendBtn.textContent = "Sending...";
+                    sendBtn.disabled = true;
+
+                    // 1. Save to Supabase first (Backup)
+                    await saveWorkbook(sheetId);
+
+                    // 2. Prepare FULL Data Payload for Webhook
+                    const name = clientNameInput.value.trim() || "A Client";
+
+                    // Scrape all textareas into a nice object
+                    const answers = {};
+                    document.querySelectorAll('textarea[data-field]').forEach(el => {
+                        answers[el.dataset.field] = el.value;
+                    });
+
+                    const payload = {
+                        clientName: name,
+                        sheetId: sheetId,
+                        timestamp: new Date().toISOString(),
+                        ...answers // Spread all answers into the root level of the JSON
+                    };
+
+                    // 3. Send to Make.com / Zapier
+                    try {
+                        // Use 'no-cors' mode to avoid CORS errors (standard for webhook triggers)
+                        await fetch(WEBHOOK_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                    } catch (err) {
+                        console.error("Webhook trigger failed (ignoring for user flow):", err);
+                    }
+
+                    // 4. Wait a beat, then show Success Modal
+                    setTimeout(() => {
+                        sendBtn.textContent = originalText;
+                        sendBtn.disabled = false;
+
+                        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.marginRight = `${scrollbarWidth}px`;
+                        modalOverlay.classList.remove('hidden');
+                    }, 1500); // 1.5s delay to feel like "work" was done
+                });
+            }
+        });
+
+        function resetSession() {
+            localStorage.removeItem('cheatSheetId');
+            localStorage.removeItem('joinedSheetId');
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => { el.value = ''; });
+            updateAllCheckmarks(); // Reset checkmarks
+
+            sheetId = generateUniqueId();
+            localStorage.setItem('cheatSheetId', sheetId);
+
+            if (cheatSheetIdDisplay) cheatSheetIdDisplay.textContent = sheetId;
+            if (modalCheatSheetID) modalCheatSheetID.textContent = sheetId;
+
+            saveWorkbook(sheetId);
+            collapseAllToggles();
+            openFirstSectionAndFocus();
+        }
+
+        function initDOM() {
+            strategySections = document.getElementById('strategy-sections');
+            cheatSheetIdDisplay = document.getElementById('cheat-sheet-id-display');
+            yourCheatSheetIdBox = document.getElementById('your-cheat-sheet-id-box');
+            joinWorkbookIDInput = document.getElementById('joinWorkbookIDInput');
+            joinBtn = document.getElementById('joinBtn');
+            sendBtn = document.getElementById('sendBtn');
+            resetBtn = document.getElementById('resetBtn');
+            modalOverlay = document.getElementById('yourCheatSheetIDModal');
+            modalCloseBtn = document.getElementById('modalCloseBtn');
+            modalCheatSheetID = document.getElementById('modalCheatSheetID');
+
+            // New Elements
+            clientNameInput = document.getElementById('clientName');
+            const copyTrigger = document.getElementById('modalCopyTextTrigger');
+
+            // BIND MODAL EVENTS HERE
+            if (modalCloseBtn && modalOverlay) {
+                modalCloseBtn.addEventListener('click', () => {
+                    modalOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    document.body.style.marginRight = '';
+                });
+            }
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', (e) => {
+                    // Close if clicking the dark overlay background
+                    if (e.target === modalOverlay) {
+                        modalOverlay.classList.add('hidden');
+                        document.body.style.overflow = '';
+                        document.body.style.marginRight = '';
+                    }
+                });
+            }
+
+            if (copyTrigger) {
+                copyTrigger.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(sheetId);
+                        const originalText = modalCheatSheetID.textContent;
+                        modalCheatSheetID.textContent = "Copied!";
+                        setTimeout(() => { modalCheatSheetID.textContent = originalText; }, 1500);
+                    } catch (err) { }
+                });
+            }
+        }
+
+        function generateUniqueId() {
+            const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+            const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+            const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+            return `${adj}-${color}-${animal}-${action}`;
+        }
+
+        function updateUIWithData(data) {
+            // Update Name
+            if (clientNameInput) clientNameInput.value = data?.clientName || "";
+
+            // Update Textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                const fieldName = textarea.dataset.field;
+                textarea.value = data?.[fieldName] || "";
+            });
+
+            // Initial checkmark update (doesn't care about open/closed)
+            updateAllCheckmarks();
+        }
+
+        async function loadDataFromSupabase(id) {
+            const { data, error } = await supabaseClient
+                .from('cheat_sheets')
+                .select('content')
+                .eq('id', id)
+                .maybeSingle();
+
+            if (error || !data) {
+                updateUIWithData(null);
+                return false;
+            }
+            updateUIWithData(data.content);
+            return true;
+        }
+
+        async function saveWorkbook(id) {
+            const content = {};
+
+            // Capture Name
+            if (clientNameInput) content['clientName'] = clientNameInput.value;
+
+            document.querySelectorAll('textarea').forEach(textarea => {
+                const fieldName = textarea.dataset.field;
+                content[fieldName] = textarea.value;
+            });
+
+            try {
+                const { data, error } = await supabaseClient.from('cheat_sheets').upsert([{ id, content }]);
+                if (error) {
+                    console.error('Supabase upsert error', error);
+                    return { success: false, error };
+                }
+                return { success: true, data };
+            } catch (err) {
+                console.error('SaveWorkbook failed', err);
+                return { success: false, error: err };
+            }
+        }
+
+        function setupAutosaveWithFeedback() {
+            const debounceTimers = new Map();
+            const inputs = document.querySelectorAll('textarea[data-field], input[data-field]');
+
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const field = input.dataset.field;
+
+                    clearTimeout(debounceTimers.get(field));
+                    const timer = setTimeout(async () => {
+                        showAutosaveStatus('saving');
+                        const res = await saveWorkbook(sheetId);
+                        if (res && res.success) {
+                            showAutosaveStatus('saved');
+                        } else {
+                            showAutosaveStatus('failed');
+                        }
+                    }, 2000);
+                    debounceTimers.set(field, timer);
+                });
+            });
+        }
+
+        // ---------------------------------------------------------
+        // UPDATED: Checkmark Logic (Only show when closed)
+        // ---------------------------------------------------------
+
+        function updateCheckmarkForCard(accordionItem) {
+            const textarea = accordionItem.querySelector('textarea');
+            const checkIcon = accordionItem.querySelector('.check-icon');
+            const content = accordionItem.querySelector('.card-content');
+
+            if (!textarea || !checkIcon || !content) return;
+
+            const hasText = textarea.value.trim().length > 0;
+            const isClosed = content.classList.contains('max-h-0');
+
+            if (hasText && isClosed) {
+                checkIcon.classList.add('visible');
+            } else {
+                checkIcon.classList.remove('visible');
+            }
+        }
+
+        function updateAllCheckmarks() {
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                updateCheckmarkForCard(item);
+            });
+        }
+        // ---------------------------------------------------------
+
+        let hideToastTimer;
+
+        function showAutosaveStatus(state) {
+            const indicator = document.getElementById('save-indicator');
+            const spinner = document.getElementById('save-spinner');
+            const check = document.getElementById('save-check');
+            const text = document.getElementById('save-text');
+
+            if (!indicator) return;
+
+            clearTimeout(hideToastTimer);
+
+            indicator.classList.remove('translate-y-10', 'opacity-0');
+
+            if (state === 'saving') {
+                spinner.classList.remove('hidden');
+                check.classList.add('hidden');
+                text.textContent = 'Saving...';
+            } else if (state === 'saved') {
+                spinner.classList.add('hidden');
+                check.classList.remove('hidden');
+                text.textContent = 'Saved';
+
+                hideToastTimer = setTimeout(() => {
+                    indicator.classList.add('translate-y-10', 'opacity-0');
+                }, 2000);
+            } else if (state === 'failed') {
+                spinner.classList.add('hidden');
+                check.classList.add('hidden');
+                text.textContent = 'Save failed';
+                text.classList.add('text-red-500');
+
+                hideToastTimer = setTimeout(() => {
+                    indicator.classList.add('translate-y-10', 'opacity-0');
+                    text.classList.remove('text-red-500');
+                }, 3000);
+            }
+        }
+
+        function setupToggleBehavior() {
+            document.querySelectorAll('.card-header').forEach(header => {
+                // keyboard accessible toggle: Enter or Space activates the header
+                header.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        header.click();
+                    }
+                });
+
+                header.addEventListener('click', () => {
+                    const group = header.closest('.accordion-item');
+                    const content = group.querySelector('.card-content');
+                    const textarea = content.querySelector('textarea');
+                    const isClosed = content.classList.contains('max-h-0');
+
+                    // FIND ICON ELEMENTS
+                    const iconWrapper = header.querySelector('.icon-wrapper');
+                    const icon = iconWrapper.querySelector('i');
+
+                    const currentlyOpenContent = document.querySelector('.card-content:not(.max-h-0)');
+                    let delay = 0;
+
+                    if (currentlyOpenContent && currentlyOpenContent !== content) {
+                        delay = 700;
+
+                        // Close currently open one
+                        currentlyOpenContent.classList.add('max-h-0', 'opacity-0', 'border-transparent');
+                        currentlyOpenContent.classList.remove('max-h-[2000px]', 'opacity-100', 'border-gray-100');
+
+                        const prevGroup = currentlyOpenContent.closest('.accordion-item');
+                        const prevHeader = prevGroup.querySelector('.card-header');
+                        const prevTitle = prevHeader.querySelector('.accordion-title');
+                        const prevChevron = prevHeader.querySelector('i.ph-caret-down');
+
+                        // Update Checkmark for the one we just closed
+                        setTimeout(() => { updateCheckmarkForCard(prevGroup); }, 700);
+
+                        // Reset Styling for previous header
+                        prevHeader.classList.remove(...ACTIVE_CLASSES);
+                        prevHeader.classList.add(...INACTIVE_CLASSES);
+                        prevTitle.classList.remove(...ACTIVE_TEXT);
+                        prevTitle.classList.add(...INACTIVE_TEXT);
+
+                        if (prevChevron) {
+                            prevChevron.classList.remove('rotate-180', 'text-blue-500');
+                            prevChevron.classList.add('text-gray-400');
+                        }
+
+                        // RESET ICON for previous header
+                        const prevIconWrapper = prevHeader.querySelector('.icon-wrapper');
+                        const prevIcon = prevIconWrapper.querySelector('i');
+                        prevIconWrapper.classList.remove('bg-blue-600');
+                        prevIconWrapper.classList.add('bg-blue-50');
+                        prevIcon.classList.remove('text-white');
+                        prevIcon.classList.add('text-blue-600');
+
+                    } else if (currentlyOpenContent === content) {
+                        // Close clicked one
+                        content.classList.add('max-h-0', 'opacity-0', 'border-transparent');
+                        content.classList.remove('max-h-[2000px]', 'opacity-100', 'border-gray-100');
+
+                        // Update Checkmark immediately since we are closing it
+                        setTimeout(() => { updateCheckmarkForCard(group); }, 700);
+
+                        header.classList.remove(...ACTIVE_CLASSES);
+                        header.classList.add(...INACTIVE_CLASSES);
+
+                        const title = header.querySelector('.accordion-title');
+                        const chevron = header.querySelector('i.ph-caret-down');
+
+                        title.classList.remove(...ACTIVE_TEXT);
+                        title.classList.add(...INACTIVE_TEXT);
+
+                        if (chevron) {
+                            chevron.classList.remove('rotate-180', 'text-blue-500');
+                            chevron.classList.add('text-gray-400');
+                        }
+
+                        // RESET ICON
+                        iconWrapper.classList.remove('bg-blue-600');
+                        iconWrapper.classList.add('bg-blue-50');
+                        icon.classList.remove('text-white');
+                        icon.classList.add('text-blue-600');
+
+                        return;
+                    }
+
+                    if (isClosed) {
+                        // We are opening it, so hide the checkmark while editing
+                        const checkIcon = group.querySelector('.check-icon');
+                        if (checkIcon) checkIcon.classList.remove('visible');
+
+                        setTimeout(() => {
+                            content.classList.remove('max-h-0', 'opacity-0', 'border-transparent');
+                            content.classList.add('max-h-[2000px]', 'opacity-100', 'border-gray-100');
+
+                            header.classList.remove(...INACTIVE_CLASSES);
+                            header.classList.add(...ACTIVE_CLASSES);
+
+                            const title = header.querySelector('.accordion-title');
+                            const chevron = header.querySelector('i.ph-caret-down');
+
+                            title.classList.remove(...INACTIVE_TEXT);
+                            title.classList.add(...ACTIVE_TEXT);
+
+                            if (chevron) {
+                                chevron.classList.add('rotate-180', 'text-blue-500');
+                                chevron.classList.remove('text-gray-400');
+                            }
+
+                            // ACTIVATE ICON
+                            iconWrapper.classList.remove('bg-blue-50');
+                            iconWrapper.classList.add('bg-blue-600');
+                            icon.classList.remove('text-blue-600');
+                            icon.classList.add('text-white');
+
+                            setTimeout(() => {
+                                const headerRect = header.getBoundingClientRect();
+                                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                                const offset = 20;
+
+                                customScrollTo(headerRect.top + scrollTop - offset, 800, () => {
+                                    if (textarea) textarea.focus({ preventScroll: true });
+                                });
+                            }, 100);
+
+                        }, delay);
+                    }
+                });
+            });
+        }
+
+        function customScrollTo(targetPosition, duration, callback) {
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = easeOutCubic(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                } else {
+                    if (callback) callback();
+                }
+            }
+
+            function easeOutCubic(t, b, c, d) {
+                t /= d;
+                t--;
+                return c * (t * t * t + 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        function setupTabNavigation() {
+            document.querySelectorAll('textarea[data-field]').forEach(textarea => {
+                textarea.addEventListener('keydown', (event) => {
+                    const allCards = Array.from(document.querySelectorAll('.accordion-item'));
+                    const currentCard = textarea.closest('.accordion-item');
+                    const currentIndex = allCards.indexOf(currentCard);
+
+                    if (event.key === 'Tab' && !event.shiftKey) {
+                        event.preventDefault();
+                        const nextCardHeader = allCards[currentIndex + 1]?.querySelector('.card-header');
+                        if (nextCardHeader) nextCardHeader.click();
+                    } else if (event.key === 'Tab' && event.shiftKey) {
+                        event.preventDefault();
+                        const prevCardHeader = allCards[currentIndex - 1]?.querySelector('.card-header');
+                        if (prevCardHeader) prevCardHeader.click();
+                    }
+                });
+            });
+        }
+
+        function openFirstSectionAndFocus() {
+            const firstCardHeader = document.querySelector('.card-header[data-index="0"]');
+            if (firstCardHeader) firstCardHeader.click();
+        }
+
+        function collapseAllToggles() {
+            document.querySelectorAll('.card-content').forEach(el => {
+                el.classList.add('max-h-0', 'opacity-0', 'border-transparent');
+                el.classList.remove('max-h-[2000px]', 'opacity-100', 'border-gray-100');
+
+                const parentGroup = el.closest('.accordion-item');
+                const prevHeader = parentGroup.querySelector('.card-header');
+
+                // Reset Header
+                prevHeader.classList.remove(...ACTIVE_CLASSES);
+                prevHeader.classList.add(...INACTIVE_CLASSES);
+                const title = prevHeader.querySelector('.accordion-title');
+                title.classList.remove(...ACTIVE_TEXT);
+                title.classList.add(...INACTIVE_TEXT);
+                const chevron = prevHeader.querySelector('i.ph-caret-down');
+                if (chevron) chevron.classList.remove('rotate-180', 'text-blue-500');
+
+                // Reset Icon
+                const iconWrapper = prevHeader.querySelector('.icon-wrapper');
+                const icon = iconWrapper.querySelector('i');
+                iconWrapper.classList.remove('bg-blue-600');
+                iconWrapper.classList.add('bg-blue-50');
+                icon.classList.remove('text-white');
+                icon.classList.add('text-blue-600');
+            });
+        }
+
+        // MOVED TO initDOM
+        function setupModal() {
+            // Logic intentionally moved to initDOM to ensure listeners bind immediately
+            // upon DOM load rather than waiting for a separate function call.
+        }
+
+        function setupJoinButton() {
+            if (!joinBtn || !joinWorkbookIDInput) return;
+            joinBtn.addEventListener('click', async () => {
+                const joinID = joinWorkbookIDInput.value.trim();
+                const statusMessage = document.getElementById('joinStatusMessage');
+                if (statusMessage) statusMessage.textContent = '';
+
+                if (!joinID) {
+                    if (statusMessage) statusMessage.textContent = 'Please enter a valid ID.';
+                    return;
+                }
+                if (statusMessage) statusMessage.textContent = 'Loading...';
+
+                const success = await loadDataFromSupabase(joinID);
+                if (success) {
+                    isViewingExisting = true;
+                    sheetId = joinID;
+                    localStorage.setItem('joinedSheetId', joinID);
+                    document.getElementById('cheat-sheet-id-display').textContent = joinID;
+                    if (statusMessage) statusMessage.textContent = '';
+                    joinWorkbookIDInput.value = '';
+                    openFirstSectionAndFocus();
+                } else {
+                    if (statusMessage) statusMessage.textContent = `Couldn't find ${joinID}. Check the code?`;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
